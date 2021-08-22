@@ -1,4 +1,4 @@
 [PROD_SERVERS]
-
-
-[PROD_SERVERS_WEB]
+Linux-1   ansible_host=   owner=Umbrella
+LInux-2   ansible_host=   owner=Skyrim
+Linux-3   ansible_host=   owner=Bash
