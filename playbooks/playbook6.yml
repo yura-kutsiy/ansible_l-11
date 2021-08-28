@@ -3,7 +3,6 @@
   hosts: all
   become: yes
 
-
   vars:
        source_folder: ./website2
        destin_folder: /var/www/html
