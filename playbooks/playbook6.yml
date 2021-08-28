@@ -26,6 +26,17 @@
                   service: name=nginx state=started enabled=yes
           when: ansible_os_family == "Debian"
 
+#---first-version
+#        - name: Copy homepage to web servers
+#          copy: src={{ source_folder }}/{{ item }} dest={{ destin_folder }} mode=0555
+#          loop:
+#                 - "index.html"
+#                 - "first.txt"
+#                 - "second.txt"
+#          notify:
+#              - Restart Nginx RedHat
+#              - Restart Nginx Debian
+
 
         - name: Copy homepage to RedHat servers
           copy: src={{ source_file }} dest={{ destin_file }} mode=0555
