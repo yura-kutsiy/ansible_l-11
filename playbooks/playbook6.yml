@@ -1,0 +1,43 @@
+---
+- name: Install Nginx and upload webpage
+  hosts: all
+  become: yes
+
+
+  vars:
+       source_folder: ./website2
+       destin_folder: /var/www/html
+
+  tasks:
+        - name: Print OS version
+          debug: var=ansible_os_family
+
+        - block: #redhat block
+                - name: Install Nginx webserver on RedHat
+                  yum: name=nginx state=latest
+                - name: Start webserver RedHat
+                  service: name=nginx state=started enabled=yes
+          when: ansible_os_family == "RedHat"
+
+        - block: #debian block
+                - name: Install Nginx webserver on Debian
+                  apt: name=nginx state=latest
+                - name: Start webserver Debian
+                  service: name=nginx state=started enabled=yes
+          when: ansible_os_family == "Debian"
+
+
+        - name: Copy homepage to RedHat servers
+          copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+          notify:
+              - Restart Nginx Redhat
+              - Restart Nginx Debian
+
+  handlers:
+        - name: Restart Nginx Debian
+          service: name=nginx state=restarted
+          when: ansible_os_family == "Debian"
+
+        - name: Restart Nginx RedHat
+          service: name=nginx state=restarted
+          when: ansible_os_family == "RedHat"
