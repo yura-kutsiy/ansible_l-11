@@ -1,0 +1,9 @@
+---
+- name: Test Connection to servers
+  hosts: PROD_SERVERS_DB , PROD_SERVERS
+  become: yes
+
+  tasks:
+
+  - name: Ping servers
+    ping:
