@@ -1,0 +1,26 @@
+---
+- name: Install Nginx and upload webpage
+  hosts: all
+  become: yes
+
+  vars:
+       source_folder: ./website2
+       destin_folder: /var/www/html
+
+  tasks:
+        - block: #-----redhat block-----
+                - name: Install Nginx webserver on RedHat
+                  yum: name=nginx state=latest
+                - name: Start webserver RedHat
+                  service: name=nginx state=started enabled=yes
+          when: ansible_os_family == "RedHat"
+
+        - block: #-----debian block-----
+                - name: Install Nginx webserver on Debian
+                  apt: name=nginx state=latest
+                - name: Start webserver Debian
+                  service: name=nginx state=started enabled=yes
+          when: ansible_os_family == "Debian"
+
+        - name: Generate index.html from .j2 file
+          template: src={{ source_folder }}/index.j2 dest={{ destin_folder }}/index.html mode=0555
