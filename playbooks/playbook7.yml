@@ -24,3 +24,22 @@
 
         - name: Generate index.html from .j2 file
           template: src={{ source_folder }}/index.j2 dest={{ destin_folder }}/index.html mode=0555
+          
+          #---first-version-copy-some-files-
+        - name: Copy homepage to web servers
+          copy: src={{ source_folder }}/{{ item }} dest={{ destin_folder }} mode=0555
+          loop:
+                 - "first.txt"
+                 - "second.txt"
+          notify:
+              - Restart Nginx RedHat
+              - Restart Nginx Debian
+
+  handlers:
+        - name: Restart Nginx Debian
+          service: name=nginx state=restarted
+          when: ansible_os_family == "Debian"
+
+        - name: Restart Nginx RedHat
+          service: name=nginx state=restarted
+          when: ansible_os_family == "RedHat"
