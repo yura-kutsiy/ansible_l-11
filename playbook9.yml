@@ -1,0 +1,50 @@
+---
+- name: playbook 9
+  hosts: all
+  become: yes
+
+  vars:
+   text: "Dobrogo ranku Ukraino!"
+
+  tasks:
+  - name: Ping test
+    ping:
+
+  - name: Unregister Server from load balancer
+    shell: echo this server {{ inventory_hostname }} was deregistered from load balancer, node name is {{ ansible_nodename }} >> /home/ubuntu/log.txt
+    delegate_to: 127.0.0.1
+
+  - name: Update DB
+    shell: UPDATING data base .....
+    run_once: true
+    delegate_to: Linux-DB.....
+
+  - name: Create File1
+    copy:
+     dest: /home/ubuntu/file1.txt
+     content: |
+             Hier is file_1
+             On English Hello World
+             On German {{ text }}
+    delegate_to: Linux-2
+    
+  - name: Create File2
+    copy:
+     dest: /home/ubuntu/file2.txt
+     content: |
+             Hier is file_2
+             On English Hello World
+             On German {{ text }}
+
+  - name: Reboot webservers
+    shell: sleep 3 ; reboot now
+    async: 1
+    poll: 0
+
+  - name: Wait server wake up
+    wait_for:
+     host: "{{ inventory_hostname }}"
+     state: started
+     delay: 5
+     timeout: 40
+    delegate_to: 127.0.0.1
