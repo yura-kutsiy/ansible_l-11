@@ -1,0 +1,17 @@
+---
+- name: playbook 8
+  hosts: all
+  become: yes
+
+  vars:
+   text: "Dobrogo ranku Ukraino!"
+
+  tasks:
+  - name: Ping test
+    ping:
+
+  - name: Create Folders
+    include: create_folders.yml
+
+  - name: Creaete Files
+    include: create_files.yml #text="make some something with include"
