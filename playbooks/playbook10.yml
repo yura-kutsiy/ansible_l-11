@@ -1,0 +1,30 @@
+---
+- name: = = = Ansible = = =
+  hosts: all
+  any_errors_fatal: true
+  become: yes
+
+  tasks:
+  - name: = = = Task n.1 = = =
+    apt: name=treeee state=latest
+    ignore_errors: yes
+
+  - name: = = = Task n.2 = = =
+    shell: echo hallo ---
+    register: results
+    #failed_when: results.rc == 0
+    #failed_when: "'hallo' in results.stdout"
+
+  - debug:
+     var: results
+
+  - name: = = = Task n.3 = = =
+    apt: name=treeee state=latest
+    ignore_errors: yes
+
+  - name: = = = Task n.4 = = =
+    shell: cat /home/ubuntu/file1.txt
+    register: results111
+
+  - name: = = = Task n.5 = = =
+    shell: echo whats upppppppppp
